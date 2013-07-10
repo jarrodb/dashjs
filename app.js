@@ -3,8 +3,9 @@
  */
 
 var argv = require('optimist')
-    .usage('Usage: $0 -p [port]')
+    .usage('Usage: $0 -i [ipv4] -p [port]')
     .alias('p', 'port')
+    .alias('i', 'ipv4')
     .argv
 
 var express = require('express')
@@ -20,8 +21,10 @@ var config = {}
   , conn = {};
 
 // Load port from args
-if (argv.p)
+if (argv.p || argv.i) {
     config.port = argv.p;
+    config.ipv4 = argv.i;
+}
 
 // setup express environment
 app.set('port', config.port || 3000);
@@ -53,6 +56,6 @@ io.sockets.on('connection', function(socket) {
 });
 //
 
-server.listen(app.get('port'), '192.168.1.174');
+server.listen(app.get('port'), config.ipv4 || '127.0.0.1');
 
 exports = module.exports = app
