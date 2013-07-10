@@ -1,0 +1,25 @@
+<html>
+<head>
+  <title>you like dashboards?</title>
+  <script
+    src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var socket = io.connect('http://65.183.42.6:3000');
+    //var socket = io.connect('http://192.168.1.174:3000');
+    socket.emit('dash', Math.random().toString(36).substring(7));
+    socket.on('url', function(data) {
+        $('#url').attr('src', data);
+    });
+    socket.on('text', function(data) {
+        var frame = $(window.parent.frames["text"].document).contents();
+        frame.find("#notifications").append("<p>"+data+"</p>");
+    });
+  </script>
+  <frameset cols="200,*" frameborder="1" border="0" framespacing="0">
+    <frame id="text" name="text" src="text.html" noresize>
+    <frame id="url" name="url" src="url.html" noresize>
+  </frameset>
+</head>
+</html>
