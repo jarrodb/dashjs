@@ -2,23 +2,44 @@
  * Module dependencies.
  */
 
+
+var DEFAULT_CHANNEL = 'default';
+
 var argv = require('optimist')
     .usage('Usage: $0 -i [ipv4] -p [port]')
     .alias('p', 'port')
     .alias('i', 'ipv4')
-    .argv
+    .argv;
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-//  , mongoose = require('mongoose')
+// imports
+var express = require('express');
+var app = require('express')();
+var http = require('http');
+var path = require('path');
+var socketio = require('socket.io');
 
-var app = express()
-  , server = http.createServer(app)
-  , io = require('socket.io').listen(server, { log: false })
+// globals
+var app = express();
 
-var config = {}
-  , conn = {};
+var connMaster = {
+  channels : {default:{}},
+  addToChan : function(chan, hash, socket) {
+    if (! chan in connMaster.channels) connMaster.channels[chan] = {};
+    connMaster.channels[chan][hash] = socket;
+  },
+  broadcast : function(chan, content) {
+    if (! chan in connMaster.channels) {
+      return;
+    }
+    for (var key in connMaster.channels[chan]) {
+      var socket = connMaster.channels[chan][key];
+      socket.emit(content.type, content.payload);
+    }
+  }
+};
+var config = {};
+var server = http.createServer(app);
+var io = socketio.listen(server, { log: false });
 
 // Load port from args
 if (argv.p || argv.i) {
@@ -33,28 +54,31 @@ app.disable('x-powered-by');
 app.use(express.static(__dirname + '/client'));
 app.use(express.bodyParser());
 
-// database
-//mongoose.connect("mongodb://localhost/seckzydash", {server: {poolSize: 5}});
-
 // controllers
-app.post('/showmethemoney', function (req, res, next) {
-    // update all dashboards
-    for (var key in conn) {
-        socket = conn[key];
-        if (req.body.url)
-            socket.emit('url', req.body.url);
-        if (req.body.text)
-            socket.emit('text', req.body.text);
-    }
-    res.send(200);
+app.post('/broadcast', function (req, res, next) {
+  // update all dashboards
+  var chan = req.params[0] || DEFAULT_CHANNEL;
+  var content = {
+    type : (req.body.url) ? 'url' : 'text',
+    payload : (req.body.url) ? req.body.url : req.body.text
+  };
+  connMaster.broadcast(chan, content);
+  res.send(200);
+});
+
+// text page.
+// for now, just send plain text but wrap this in something prettier later
+app.get('/text', function genText(req, res, next) {
+  var text = req.query['body'];
+  res.send(text);
 });
 
 io.sockets.on('connection', function(socket) {
-    socket.on('dash', function(hash) {
-        conn[hash] = socket;
-    });
+  socket.on('dash', function(hash, channel) {
+    if(!channel) channel = DEFAULT_CHANNEL;
+    connMaster.addToChan(channel, hash, socket);
+  });
 });
-//
 
 server.listen(app.get('port'), config.ipv4 || '127.0.0.1');
 

@@ -1,13 +1,13 @@
 {
-    "name"   : "seckzydash"
-  , "version": "0.1.0"
-  , "private": true
-  , "scripts": {
-        "start"     : "nodemon app.js"
-    }
-  , "dependencies": {
-        "express"   : "3.2.0"
-      , "socket.io" : "latest"
-      , "optimist"  : "latest"
-    }
+  "name"   : "seckzydash",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start"     : "nodemon app.js"
+  },
+  "dependencies": {
+    "express"   : "3.2.0",
+    "socket.io" : "latest",
+    "optimist"  : "latest"
+  }
 }
