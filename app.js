@@ -10,7 +10,7 @@ var argv = require('optimist')
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , mongoose = require('mongoose')
+//  , mongoose = require('mongoose')
 
 var app = express()
   , server = http.createServer(app)
@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/client'));
 app.use(express.bodyParser());
 
 // database
-mongoose.connect("mongodb://localhost/seckzydash", {server: {poolSize: 5}});
+//mongoose.connect("mongodb://localhost/seckzydash", {server: {poolSize: 5}});
 
 // controllers
 app.post('/showmethemoney', function (req, res, next) {
