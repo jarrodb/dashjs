@@ -13,7 +13,6 @@ var argv = require('optimist')
 
 // imports
 var express = require('express');
-var app = require('express')();
 var http = require('http');
 var path = require('path');
 var socketio = require('socket.io');
@@ -37,18 +36,13 @@ var connMaster = {
     }
   }
 };
-var config = {};
+var config = {port: argv.i, ipv4: argv.i};
 var server = http.createServer(app);
-var io = socketio.listen(server, { log: false });
-
-// Load port from args
-if (argv.p || argv.i) {
-    config.port = argv.p;
-    config.ipv4 = argv.i;
-}
+var io = socketio.listen(server, { log: true });
 
 // setup express environment
 app.set('port', config.port || 3000);
+app.set('ipv4', config.ipv4 || '127.0.0.1');
 app.set('env', process.env.NODE_ENV || 'production');
 app.disable('x-powered-by');
 app.use(express.static(__dirname + '/client'));
@@ -60,7 +54,7 @@ app.post('/broadcast', function (req, res, next) {
   var chan = req.params[0] || DEFAULT_CHANNEL;
   var content = {
     type : (req.body.url) ? 'url' : 'text',
-    payload : (req.body.url) ? req.body.url : req.body.text
+    payload : req.body.url || req.body.text
   };
   connMaster.broadcast(chan, content);
   res.send(200);
@@ -73,6 +67,7 @@ app.get('/text', function genText(req, res, next) {
   res.send(text);
 });
 
+// socket io events
 io.sockets.on('connection', function(socket) {
   socket.on('dash', function(hash, channel) {
     if(!channel) channel = DEFAULT_CHANNEL;
@@ -80,6 +75,6 @@ io.sockets.on('connection', function(socket) {
   });
 });
 
-server.listen(app.get('port'), config.ipv4 || '127.0.0.1');
+server.listen(app.get('port'), app.get('ipv4'));
 
 exports = module.exports = app
