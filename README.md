@@ -27,6 +27,25 @@ content to be injected as needed.
 - npm install # to install the dependencies
 - node app.js
 
+#### Broadcast to the Dashboard
 
+The dashboard currently accepts a `url` and `text` key in the JSON payload
 
+**Example URL request**
+```
+POST http://dashboard/broadcast
+Content-Type: application/json
+{
+    "url": "http://github.com"
+}
+```
+
+** Example text request**
+```
+POST http://dashboard/broadcast
+Content-Type: application/json
+{
+    "text": "dashboards are ggggrrreeaatt!"
+}
+```
 
