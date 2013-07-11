@@ -1,0 +1,5 @@
+// copy local.txt to local.js to include
+// properties for your local environment
+
+module.exports = {
+}
