@@ -9,6 +9,7 @@
     "express"   : "3.2.0",
     "socket.io" : "latest",
     "optimist"  : "latest",
-    "level"     : "latest"
+    "levelup"   : "latest",
+    "leveldown" : "latest"
   }
 }
