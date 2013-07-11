@@ -27,7 +27,7 @@ content to be injected as needed.
 - npm install # to install the dependencies
 - node app.js
 
-#### Broadcast to the Dashboard
+# dashboard api
 
 The dashboard currently accepts a `url` and `text` key in the JSON payload
 
@@ -40,7 +40,7 @@ Content-Type: application/json
 }
 ```
 
-** Example text request**
+**Example text request**
 ```
 POST http://dashboard/broadcast
 Content-Type: application/json
