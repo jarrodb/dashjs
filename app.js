@@ -17,7 +17,7 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var socketio = require('socket.io');
-var level = require('level');
+var level = require('levelup');
 var exphbs = require('express3-handlebars');
 
 // globals
