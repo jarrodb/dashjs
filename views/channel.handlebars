@@ -1,0 +1,16 @@
+<div id="billboard"> </div>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+    var baseURI = '{{{baseuri}}}';
+    var socket = io.connect(baseURI);
+    socket.emit('dash', Math.random().toString(36).substring(7));
+    socket.on('pane', function(data) {
+        $('#billboard').load(data);
+    });
+    socket.on('url', function(data) {
+        $('#billboard').html('<iframe frameBorder="0" width="100%" height="100%" src='+data+'></iframe>');
+    });
+    socket.on('text', function(data) {
+        $('#billboard').html('<div class="jumbotron masthead"><div class="container"><div class="pushblock"></div><h1>' + data + '</h1></div></div>');
+    });
+</script>
