@@ -33,7 +33,7 @@ body {
     padding-top: 0px;
   }
 }
-#content { height: 100%; min-height: 100%; }
+#billboard { height: 100%; min-height: 100%; }
   </style>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
@@ -42,7 +42,7 @@ body {
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
-    var baseURI = 'http://localhost:3000';
+    var baseURI = 'http://127.0.0.1:3000';
     var socket = io.connect(baseURI);
     socket.emit('dash', Math.random().toString(36).substring(7));
     socket.on('pane', function(data) {
@@ -65,6 +65,6 @@ body {
       </div>
     </div>
 
-  <div id='billboard'> </div>
+  <div id="billboard"> </div>
 </body>
 </html>
