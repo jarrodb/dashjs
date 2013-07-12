@@ -1,18 +1,18 @@
-// socket io events
+/**
+ * socket io events
+ */
 
 var config = require('../config/config');
 
-module.exports = function(io, db) {
+module.exports = function(app, conman, io) {
   io.sockets.on('connection', function(socket) {
-    socket.on('dash', function(hash, channel) {
-      if(!channel) channel = config.DEFAULT_CHANNEL;
-
-      db.put(channel+'~'+hash, socket.id, function (err) {
-        if (err) return console.log('Ooops!', err)
-      });
+    socket.on('dash', function(hash, chan) {
+      if (typeof chan === 'undefined') chan = config.DEFAULT_CHANNEL;
+      conman.sub(hash, socket, chan);
     });
     socket.on('disconnect', function () {
-        // delete from leveldb
+      // XXX how to get the chan this is attached to?
+      // conman.del(socket.id, chan);
     });
   });
 }

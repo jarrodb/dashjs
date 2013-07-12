@@ -3,8 +3,6 @@
  */
 
 
-var DEFAULT_CHANNEL = 'default';
-
 var argv = require('optimist')
     .usage('Usage: $0 -i [ipv4] -p [port]')
     .alias('p', 'port')
@@ -25,7 +23,7 @@ var app = express();
 var db = level('./dashdb');
 
 var server = http.createServer(app);
-var io = socketio.listen(server, { log: true });
+io = socketio.listen(server, { log: true });
 
 // setup express environment
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -37,11 +35,17 @@ app.disable('x-powered-by');
 app.use(express.static(__dirname + '/client'));
 app.use(express.bodyParser());
 
+
+// services
+var conman = require('./services/conman');
+
 // controllers
-require('./controllers/channel')(app);
-require('./controllers/api')(app, io, db);
-require('./controllers/sockets')(io, db);
+require('./controllers/channel')(app, conman);
+require('./controllers/api')(app, conman);
+require('./controllers/sockets')(app, conman, io);
+
 
 server.listen(app.get('port'), app.get('ipv4'));
 
 exports = module.exports = app
+
