@@ -2,12 +2,12 @@
 
 
 ```
-         _______       ___           _______. __    __         __       _______. 
-        |       \     /   \         /       ||  |  |  |       |  |     /       | 
-        |  .--.  |   /  ^  \       |   (----`|  |__|  |       |  |    |   (----` 
-        |  |  |  |  /  /_\  \       \   \    |   __   | .--.  |  |     \   \ 
-        |  '--'  | /  _____  \  .----)   |   |  |  |  | |  `--'  | .----)   | 
-        |_______/ /__/     \__\ |_______/    |__|  |__|  \______/  |_______/ 
+       _______       ___           _______. __    __         __       _______. 
+      |       \     /   \         /       ||  |  |  |       |  |     /       | 
+      |  .--.  |   /  ^  \       |   (----`|  |__|  |       |  |    |   (----` 
+      |  |  |  |  /  /_\  \       \   \    |   __   | .--.  |  |     \   \ 
+      |  '--'  | /  _____  \  .----)   |   |  |  |  | |  `--'  | .----)   | 
+      |_______/ /__/     \__\ |_______/    |__|  |__|  \______/  |_______/ 
 ```
 
 --
@@ -29,23 +29,27 @@ content to be injected as needed.
 
 # dashboard api
 
-The dashboard currently accepts a `url` and `text` key in the JSON payload
+The dashboard accepts a json object defining a `type` and `data`.
+
+At present, `type` is limited to either `url` or `text`.
 
 **Example URL request**
 ```
-POST http://dashboard/broadcast
+POST http://dashboard/broadcast/CHANNEL_NAME
 Content-Type: application/json
 {
-    "url": "http://github.com"
+	"type": "url",
+    "data": "http://github.com"
 }
 ```
 
 **Example text request**
 ```
-POST http://dashboard/broadcast
+POST http://dashboard/broadcast/MYCHAN
 Content-Type: application/json
 {
-    "text": "dashboards are ggggrrreeaatt!"
+	"type": "text",
+    "data": "dashboards are ggggrrreeaatt!"
 }
 ```
 
