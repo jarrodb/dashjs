@@ -37,7 +37,8 @@ app.use(express.bodyParser());
 
 
 // services
-var conman = require('./services/conman');
+var conManagerSingleton = require('./services/conman');
+var conman = new conManagerSingleton(io);
 
 // controllers
 require('./controllers/channel')(app, conman);
