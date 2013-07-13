@@ -46,6 +46,11 @@ body {
       <div class="navbar-inner">
         <div class="container">
           <a class="brand" href="#">dashed</a>
+          {{# if user}}
+          <div class="pull-right">
+            <p><a href="/logout">Logout</a></p>
+          </div>
+          {{/if}}
         </div>
       </div>
     </div>

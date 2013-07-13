@@ -10,17 +10,18 @@ var argv = require('optimist')
     .argv;
 
 // imports
-var config = require('./config/config')
+var config = require('./config/config');
+var level = require('./libs/level');
 var express = require('express');
 var http = require('http');
 var path = require('path');
 var socketio = require('socket.io');
-var level = require('levelup');
 var exphbs = require('express3-handlebars');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 // globals
 var app = express();
-var db = level('./dashdb');
 
 var server = http.createServer(app);
 io = socketio.listen(server, { log: true });
@@ -34,7 +35,35 @@ app.set('env', process.env.NODE_ENV || 'production');
 app.disable('x-powered-by');
 app.use(express.static(__dirname + '/client'));
 app.use(express.bodyParser());
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'eyeyamsupersekret' }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(app.router);
 
+// models
+level.connect(config.db_name);
+require('./models/user');
+
+// middleware
+passport.use('user', new LocalStrategy(
+  function(username, password, done) {
+    var User = level.model('User');
+    User.prototype.authenticate(username, password, function(err, user) {
+      if (err || ! user)
+        return done(null, false);
+      return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 // services
 var conManagerSingleton = require('./services/conman');
@@ -42,9 +71,9 @@ var conman = new conManagerSingleton(io);
 
 // controllers
 require('./controllers/channel')(app, conman);
+require('./controllers/login')(app);
 require('./controllers/api')(app, conman);
 require('./controllers/sockets')(app, conman, io);
-
 
 server.listen(app.get('port'), app.get('ipv4'));
 
