@@ -5,6 +5,7 @@
 var config = {
     // dash config
     baseuri : 'http://localhost:3000',
+    db_name : 'dashdb',
     DEFAULT_CHANNEL: 'default',
 
     // server config
