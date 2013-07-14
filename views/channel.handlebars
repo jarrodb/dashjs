@@ -3,7 +3,7 @@
 <script type="text/javascript">
     var baseURI = '{{{baseuri}}}';
     var socket = io.connect(baseURI);
-    socket.emit('dash', Math.random().toString(36).substring(7), '{{{channel}}}');
+    socket.emit('dash', '{{{user}}}', '{{{channel}}}');
     socket.on('pane', function(data) {
         $('#billboard').load(data);
     });

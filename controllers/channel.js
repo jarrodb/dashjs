@@ -16,6 +16,12 @@ var genText = function(req, res, next) {
 module.exports = function(app) {
   // el viewer
   // for now, just send plain text but wrap this in something prettier later
-  app.get('/', function(req, res) { res.redirect('/login'); });
+  app.get(
+    '/',
+    mw.loginRequired,
+    function(req, res) {
+      res.redirect('/channel');
+  });
+
   app.get('/channel/:chan?', mw.loginRequired, genText);
 }
