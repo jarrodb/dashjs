@@ -4,14 +4,19 @@
 
 var config = {
     // dash config
-    baseuri : 'http://localhost:3000',
+    baseuri : 'http://127.0.0.1:3000',
     db_name : 'dashdb',
     DEFAULT_CHANNEL: 'default',
 
     // server config
     listen: {
-        ipv4: '127.0.0.1',
-        port: 3000
+      ipv4: '127.0.0.1',
+      port: 3000
+    },
+
+    session: {
+      secret: 'eifohweifnewiofewfew',
+      key: 'express.sid'
     }
 }
 
