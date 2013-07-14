@@ -18,11 +18,14 @@ var path = require('path');
 var socketio = require('socket.io');
 var exphbs = require('express3-handlebars');
 var passport = require('passport');
+var passportIo = require('passport.socketio');
+
 var LocalStrategy = require('passport-local').Strategy;
+var MemoryStore = express.session.MemoryStore;
 
 // globals
 var app = express();
-
+var memoryStore = new MemoryStore();
 var server = http.createServer(app);
 io = socketio.listen(server, { log: true });
 
@@ -36,7 +39,11 @@ app.disable('x-powered-by');
 app.use(express.static(__dirname + '/client'));
 app.use(express.bodyParser());
 app.use(express.cookieParser());
-app.use(express.session({ secret: 'eyeyamsupersekret' }));
+app.use(express.session({
+  store: memoryStore,
+  secret: config.session.secret,
+  key: config.session.key,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
@@ -46,6 +53,13 @@ level.connect(config.db_name);
 require('./models/user');
 
 // middleware
+io.set("authorization", passportIo.authorize({
+  cookieParser: express.cookieParser,
+  store: memoryStore,
+  key: config.session.key,
+  secret: config.session.secret,
+}));
+
 passport.use('user', new LocalStrategy(
   function(username, password, done) {
     var User = level.model('User');
@@ -58,6 +72,8 @@ passport.use('user', new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
+  // Delete the password before serializing
+  delete user.password;
   done(null, user);
 });
 
