@@ -27,7 +27,7 @@ describe('Level CRUD tests', function() {
     });
 
 
-    it('will creating a user successfull', function(done) {
+    it('will create a user successfully', function(done) {
         var success = new User({
             fullname: 'Billy Bob',
             username: 'billy'
