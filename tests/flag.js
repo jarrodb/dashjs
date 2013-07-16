@@ -18,7 +18,7 @@ describe('Flags', function() {
     console.log(level.models.Flag);
     var f1 = new level.models.Flag(faker)
       , f2 = new level.models.Flag(faker);
-    f1.hash.should.not.equal(1); //f2.hash);
+    f1.hash.should.not.equal(f2.hash);
     done();
   });
 

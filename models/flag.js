@@ -12,17 +12,14 @@
  */
 
 var level = require('../libs/level');
-
-var gen_hash = function() {
-  return 4;
-}
+var uuid = require('node-uuid');
 
 var Flag = new level.Model(
   {
       name    : {type: String}
     , symbol  : {type: String, default: 'flag'} // font-awesome class name for
                                                 // a symbol, w/o 'icon-'
-    , hash    : {type: String, default: gen_hash }
+    , hash    : {type: String, default: uuid.v4 }
     , stale   : {type: Number, default: -1} // seconds till converts to stale
     , expires : {type: Number, default: -1} // seconds till expire and FAIL.
                                             // note if this is bigger than the
