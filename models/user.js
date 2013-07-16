@@ -7,8 +7,8 @@ var bcrypt = require('bcrypt');
 
 var User = level.Model({
   fullname: {type: String},
-  username: {type: String}, //, required: true},
-  password: {type: String}
+  username: {type: String},
+  password: {type: String, required: true}
 },{
   key: 'username',
   set_password: function(password) {
