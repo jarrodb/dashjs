@@ -49,7 +49,7 @@ app.use(passport.session());
 app.use(app.router);
 
 // models
-level.connect(config.db_name);
+level.connect(config.root+'/'+config.db_name);
 require('./models/user');
 
 // middleware
