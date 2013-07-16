@@ -2,6 +2,8 @@
  * Module dependencies.
  */
 
+var path = require('path');
+
 var config = {
     // dash config
     baseuri : 'http://127.0.0.1:3000',
@@ -9,6 +11,8 @@ var config = {
     DEFAULT_CHANNEL: 'default',
 
     // server config
+    root    : path.resolve(__dirname, '/..'),
+
     listen: {
       ipv4: '127.0.0.1',
       port: 3000
