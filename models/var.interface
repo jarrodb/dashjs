@@ -1,0 +1,19 @@
+Variable
+========
+
+A variable is a defined instance that allows you to track a value at a given
+time.
+
+interface
+---------
+
+Any model conforming to the Variable interface must define the following:
+
+- transform() - method which returns the data for the Variable in a renderable.
+	i.e. - for a simple non-expiring Flag, this is the most recent value
+
+- update(val, ts) - method which updates the state of the variable.
+	- val - the value to capture
+	- ts  - a DATE object or null.  If null, this should assume the current time
+
+

@@ -6,9 +6,10 @@ var level = require('../libs/level');
 var bcrypt = require('bcrypt');
 
 var User = level.Model({
-  fullname: {type: String},
-  username: {type: String},
-  password: {type: String, required: true}
+  fullname    : {type: String},
+  username    : {type: String},
+  created_at  : {type: Date, default: function(){return new Date();}},
+  password    : {type: String, required: true}
 },{
   key: 'username',
   set_password: function(password) {

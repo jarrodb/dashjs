@@ -10,13 +10,14 @@ require('./models/user');
 var User = level.model('User')
 
 var admin = new User({
-    fullname: "Administrator",
-    username: "admin",
+  fullname: "Administrator",
+  username: "admin",
 });
 admin.set_password("dashing");
 console.log(JSON.stringify(admin));
 admin.save(function(err) {
-    console.log("User "+admin.username+" created successfully");
-    process.exit();
+  // XXX check for error on this save
+  console.log("User "+admin.username+" created successfully");
+  process.exit();
 });
 

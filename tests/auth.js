@@ -18,8 +18,8 @@ describe('Authentication', function() {
 
     before(function(done) {
         // add a user
-        var User = level.model('User')
-        admin = new User(dummy)
+        var User = level.models.User;
+        admin = new User(dummy);
         admin.set_password(dummy.password);
         admin.save(function(err) {
             done();

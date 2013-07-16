@@ -51,6 +51,7 @@ app.use(app.router);
 // models
 level.connect(config.root+'/'+config.db_name);
 require('./models/user');
+require('./models/flag');
 
 // middleware
 io.set("authorization", passportIo.authorize({

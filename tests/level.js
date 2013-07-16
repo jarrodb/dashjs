@@ -6,8 +6,15 @@ var level = require('../libs/level');
 var should = require('should');
 
 describe('Level CRUD tests', function() {
-    var User = level.model('User');
-    var user = '';
+    var User = level.models.User;
+    var user = null;
+
+    it('will let me pass a callable for default', function(done) {
+      user = new User({username:'fakie'});
+      console.log('user is now', user);
+      user.created_at.should.be.an.instanceOf(Date);
+      done();
+    });
 
     it('will fail creating a user without a key', function(done) {
         var fail = new User({fullname: 'Billy Bob'})
@@ -25,7 +32,6 @@ describe('Level CRUD tests', function() {
             done();
         });
     });
-
 
     it('will create a user successfully', function(done) {
         var success = new User({

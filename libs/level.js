@@ -5,12 +5,18 @@
 var level = require('levelup');
 
 var Model = function(schema, properties) {
-  _Model = function(data) {
-    for (var field in schema)
-      this[field] = (data)
-        ? data[field]
-        : schema[field].default
-        || schema[field].type();
+  var _Model = function(data) {
+    for (var field in schema) {
+      if (data && data.hasOwnProperty(field)) this[field] = data[field];
+      else {
+        var field_default = schema[field].default;
+        if (field_default && typeof field_default === 'function') {
+            this[field] = field_default();
+        } else {
+            this[field] = field_default;
+        }
+      }
+    }
   };
   _Model.prototype = {
     db: leveldb.db,
