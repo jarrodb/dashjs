@@ -15,6 +15,11 @@
     "bcrypt": "~0.7.6",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
-    "passport.socketio": "~1.2.1"
+    "passport.socketio": "~1.2.1",
+  },
+  "devDependencies": {
+    "mocha": "latest",
+    "supertest": "latest",
+    "should": "latest"
   }
 }
