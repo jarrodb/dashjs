@@ -23,9 +23,24 @@ var Model = function(schema, properties) {
       }
       this.db.put(this.key+'~'+this[this.key], JSON.stringify(this), cb);
     },
+    find: function(name, cb) {
+      this.db.get(this.key+'~'+name, function(err, doc) {
+        if (err) cb(err, null);
+        cb(null, new _Model(JSON.parse(doc)));
+      });
+    },
+    remove: function(cb) {
+      if (! this[this.key])
+        cb(new Error("model must be populated"));
+      this.db.del(this.key+'~'+this[this.key], cb);
+    },
     _validate: function() {
       if (! this.key || ! this[this.key])
         throw new Error('key cannot be empty');
+      for (var k in this.schema) {
+        if (! this[k] && this.schema[k].required)
+          throw new Error(k+' is a required field');
+      }
       if (this.validate)
         this.validate();
     },
