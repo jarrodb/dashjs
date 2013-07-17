@@ -16,7 +16,7 @@ var User = level.Model({
     this.password = bcrypt.hashSync(password, 8);
   },
   authenticate: function(username, password, cb) {
-    level.db.get(this.key+'~'+username, function(err, user) {
+    level.db.get(this._name+'~'+username, function(err, user) {
       if (err) return cb(err);
 
       var user = JSON.parse(user);
