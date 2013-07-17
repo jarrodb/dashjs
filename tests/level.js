@@ -11,7 +11,6 @@ describe('Level CRUD tests', function() {
 
     it('will let me pass a callable for default', function(done) {
       user = new User({username:'fakie'});
-      console.log('user is now', user);
       user.created_at.should.be.an.instanceOf(Date);
       done();
     });
@@ -20,7 +19,7 @@ describe('Level CRUD tests', function() {
         var fail = new User({fullname: 'Billy Bob'})
         fail.save(function(err, doc) {
             should.not.exist(doc);
-            err.message.should.equal('key cannot be empty');
+            err.message.should.equal('_key cannot be empty');
             done();
         });
     });

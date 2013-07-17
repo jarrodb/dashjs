@@ -11,12 +11,13 @@ var User = level.Model({
   created_at  : {type: Date, default: function(){return new Date();}},
   password    : {type: String, required: true}
 },{
-  key: 'username',
+  _key: 'username',
+  _prefix: 'user',
   set_password: function(password) {
     this.password = bcrypt.hashSync(password, 8);
   },
   authenticate: function(username, password, cb) {
-    level.db.get(this.key+'~'+username, function(err, user) {
+    level.db.get(this._recKey(username), function(err, user) {
       if (err) return cb(err);
 
       var user = JSON.parse(user);

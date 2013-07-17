@@ -63,7 +63,7 @@ io.set("authorization", passportIo.authorize({
 
 passport.use('user', new LocalStrategy(
   function(username, password, done) {
-    var User = level.model('User');
+    var User = level.models.User;
     User.prototype.authenticate(username, password, function(err, user) {
       if (err || ! user)
         return done(null, false);
@@ -91,6 +91,7 @@ require('./controllers/channel')(app, conman);
 require('./controllers/login')(app);
 require('./controllers/api')(app, conman);
 require('./controllers/sockets')(app, conman, io);
+require('./controllers/flag')(app, level);
 
 server.listen(app.get('port'), app.get('ipv4'));
 

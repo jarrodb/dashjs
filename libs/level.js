@@ -21,28 +21,33 @@ var Model = function(schema, properties) {
   _Model.prototype = {
     db: leveldb.db,
     schema: schema,
+    _recKey: function(key) {
+      if (!key) key = this[this._key];
+      return recKey = this._prefix + '~' + key;
+    },
     save: function(cb) {
       try {
         this._validate();
       } catch(e) {
         return cb(e);
       }
-      this.db.put(this.key+'~'+this[this.key], JSON.stringify(this), cb);
+      var recKey = this._recKey();
+      this.db.put(recKey, JSON.stringify(this), cb);
     },
-    find: function(name, cb) {
-      this.db.get(this.key+'~'+name, function(err, doc) {
+    find: function(key, cb) {
+      this.db.get(this._recKey(key), function(err, doc) {
         if (err) cb(err, null);
         cb(null, new _Model(JSON.parse(doc)));
       });
     },
     remove: function(cb) {
-      if (! this[this.key])
+      if (! this[this._key])
         cb(new Error("model must be populated"));
-      this.db.del(this.key+'~'+this[this.key], cb);
+      this.db.del(recKey, cb);
     },
     _validate: function() {
-      if (! this.key || ! this[this.key])
-        throw new Error('key cannot be empty');
+      if (! this._key || ! this[this._key])
+        throw new Error('_key cannot be empty');
       for (var k in this.schema) {
         if (! this[k] && this.schema[k].required)
           throw new Error(k+' is a required field');

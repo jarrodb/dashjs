@@ -26,7 +26,8 @@ var Flag = new level.Model(
                                             // stale value, you will skip stale
                                             // and go straight to fail
   }, {
-      key: 'flagdef'
+      _key: 'hash'
+    , _prefix: 'flag'
     , transform : function() {
         // stuff
       }
