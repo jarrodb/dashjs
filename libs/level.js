@@ -27,10 +27,10 @@ var Model = function(schema, properties) {
       } catch(e) {
         return cb(e);
       }
-      this.db.put(this.key+'~'+this[this.key], JSON.stringify(this), cb);
+      this.db.put(this._name+'~'+this[this.key], JSON.stringify(this), cb);
     },
-    find: function(name, cb) {
-      this.db.get(this.key+'~'+name, function(err, doc) {
+    find: function(key, cb) {
+      this.db.get(this._name+'~'+key, function(err, doc) {
         if (err) cb(err, null);
         cb(null, new _Model(JSON.parse(doc)));
       });
@@ -38,7 +38,7 @@ var Model = function(schema, properties) {
     remove: function(cb) {
       if (! this[this.key])
         cb(new Error("model must be populated"));
-      this.db.del(this.key+'~'+this[this.key], cb);
+      this.db.del(this._name+'~'+this[this.key], cb);
     },
     _validate: function() {
       if (! this.key || ! this[this.key])
@@ -73,6 +73,8 @@ var leveldb = {
   model : function(name, obj) {
     if (typeof obj === 'undefined')
       return this.models[name];
+    obj.prototype._name = name.toLowerCase(); // use the model name to
+                                              // construct the key
     obj.db = this.db;
     this.models[name] = obj;
   },
