@@ -23,7 +23,6 @@ describe('Flags CRUD', function() {
   });
 
   it('put my new flag in the db', function(done) {
-    return done();
     var f = new level.models.Flag({name:'newflag'});
     f.save(function(err) {
       should.not.exist(err);
@@ -52,7 +51,6 @@ describe('Flag controllers', function() {
   });
 
   it('makes a new flag', function(done) {
-    return done();
     request(app).post('/flag')
       .send({ name : 'yohomie' })
       .end(function(err, res) {
@@ -60,11 +58,9 @@ describe('Flag controllers', function() {
         res.body.should.have.property('flag');
         res.body.flag.should.not.be.empty;
         var newFlagKey = res.body.flag;
-        var Flag = level.models.Flag.prototype.find(
-          newFlagKey,
-          function(err, f) {
+        level.models.Flag.prototype.find( newFlagKey, function(err, f) {
             should.not.exist(err);
-            f.should.be.an.instanceOf(Flag);
+            f.should.be.an.instanceOf(level.models.Flag);
             done();
           }
         );

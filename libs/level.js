@@ -28,20 +28,16 @@ var Model = function(schema, properties) {
     save: function(cb) {
       try {
         this._validate();
-        console.log('x');
       } catch(e) {
         return cb(e);
       }
-      console.log('xx');
       var key = this._recKey();
-      console.log('xxx');
       this.db.put(key, JSON.stringify(this), cb);
-      console.log('xxxx');
     },
     find: function(key, cb) {
       this.db.get(this._recKey(key), function(err, doc) {
         if (err) return cb(err, null);
-        if (typeof doc !== 'undefined') return cb(null, null);
+        if (typeof doc === 'undefined') return cb(null, null);
         return cb(null, new _Model(JSON.parse(doc)));
       });
     },

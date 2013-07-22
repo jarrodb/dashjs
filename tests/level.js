@@ -33,13 +33,9 @@ describe('Level CRUD tests', function() {
     });
 
     it('will create and save a user successfully', function(done) {
-      console.log(level.db);
-      var success = new User({
-        fullname: 'Billy Bob',
-        username: 'billy'
-      })
-      success.set_password('baitshop');
-      success.save(function(err) {
+      var newU = new User({ username: 'billy' })
+      newU.set_password('baitshop');
+      newU.save(function(err) {
         should.not.exist(err);
         User.prototype.find('billy', function(err,u) {
           should.not.exist(err);

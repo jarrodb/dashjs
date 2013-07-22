@@ -27,7 +27,6 @@ var Flag = new level.Model(
                                             // and go straight to fail
   }, {
       _key: 'hash'
-    , _prefix: 'flag'
     , transform : function() {
         // stuff
       }
