@@ -12,7 +12,6 @@ var User = level.Model({
   password    : {type: String, required: true}
 },{
   _key: 'username',
-  _prefix: 'user',
   set_password: function(password) {
     this.password = bcrypt.hashSync(password, 8);
   },

@@ -22,11 +22,24 @@ describe('Flags CRUD', function() {
     done();
   });
 
+  it('put my new flag in the db', function(done) {
+    return done();
+    var f = new level.models.Flag({name:'newflag'});
+    f.save(function(err) {
+      should.not.exist(err);
+      level.models.Flag.prototype.find(f.hash, function(err, doc) {
+        should.not.exist(err);
+        should.exist(doc);
+        done();
+      });
+    });
+  });
+
+
 });
 
 
 describe('Flag controllers', function() {
-  var shared_flag = null;
 
   it('making a new flag want a name', function(done) {
     request(app).post('/flag')
@@ -39,26 +52,27 @@ describe('Flag controllers', function() {
   });
 
   it('makes a new flag', function(done) {
+    return done();
     request(app).post('/flag')
       .send({ name : 'yohomie' })
       .end(function(err, res) {
         res.should.have.status(200);
         res.body.should.have.property('flag');
         res.body.flag.should.not.be.empty;
-
+        var newFlagKey = res.body.flag;
         var Flag = level.models.Flag.prototype.find(
-          res.body.flag,
-          function(err, flag) {
-            shared_flag = flag;
-            flag.should.not.be.null;
+          newFlagKey,
+          function(err, f) {
+            should.not.exist(err);
+            f.should.be.an.instanceOf(Flag);
+            done();
           }
         );
 
-        done();
       });
   });
 
-  it('can not find a flag', function(done) {
+  it('cannot find a flag', function(done) {
     request(app).post('/flag/notthere')
       .send({})
       .end(function(err, res) {

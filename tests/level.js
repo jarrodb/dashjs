@@ -32,24 +32,27 @@ describe('Level CRUD tests', function() {
         });
     });
 
-    it('will create a user successfully', function(done) {
-        var success = new User({
-            fullname: 'Billy Bob',
-            username: 'billy'
-        })
-        success.set_password('baitshop');
-        success.save(function(err) {
-            should.not.exist(err);
-            done();
+    it('will create and save a user successfully', function(done) {
+      console.log(level.db);
+      var success = new User({
+        fullname: 'Billy Bob',
+        username: 'billy'
+      })
+      success.set_password('baitshop');
+      success.save(function(err) {
+        should.not.exist(err);
+        User.prototype.find('billy', function(err,u) {
+          should.not.exist(err);
+          should.exist(u);
+          done();
         });
+      });
     });
 
-    it('will find the user', function(done) {
-        User.prototype.find('billy', function(err, doc) {
-            should.not.exist(err);
-            doc.should.have.property('username');
-            doc.username.should.equal('billy');
-            user = doc;
+    it('will not find the user', function(done) {
+        User.prototype.find('jimmyhoffa', function(err, doc) {
+            should.exist(err);
+            should.not.exist(doc);
             done();
         });
     });
@@ -60,4 +63,5 @@ describe('Level CRUD tests', function() {
             done();
         });
     });
+
 });

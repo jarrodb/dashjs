@@ -22,28 +22,33 @@ var Model = function(schema, properties) {
     db: leveldb.db,
     schema: schema,
     _recKey: function(key) {
-      if (!key) key = this[this._key];
-      return recKey = this._prefix + '~' + key;
+      if (typeof key === 'undefined') key = this[this._key];
+      return this._name + '~' + key;
     },
     save: function(cb) {
       try {
         this._validate();
+        console.log('x');
       } catch(e) {
         return cb(e);
       }
-      var recKey = this._recKey();
-      this.db.put(recKey, JSON.stringify(this), cb);
+      console.log('xx');
+      var key = this._recKey();
+      console.log('xxx');
+      this.db.put(key, JSON.stringify(this), cb);
+      console.log('xxxx');
     },
     find: function(key, cb) {
       this.db.get(this._recKey(key), function(err, doc) {
-        if (err) cb(err, null);
-        cb(null, new _Model(JSON.parse(doc)));
+        if (err) return cb(err, null);
+        if (typeof doc !== 'undefined') return cb(null, null);
+        return cb(null, new _Model(JSON.parse(doc)));
       });
     },
     remove: function(cb) {
       if (! this[this._key])
         cb(new Error("model must be populated"));
-      this.db.del(recKey, cb);
+      this.db.del(this._recKey(), cb);
     },
     _validate: function() {
       if (! this._key || ! this[this._key])
@@ -78,6 +83,8 @@ var leveldb = {
   model : function(name, obj) {
     if (typeof obj === 'undefined')
       return this.models[name];
+    obj.prototype._name = name.toLowerCase(); // use the model name to
+                                              // construct the key
     obj.db = this.db;
     this.models[name] = obj;
   },

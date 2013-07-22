@@ -9,7 +9,7 @@ module.exports = function(app, level) {
     var name = req.body.name;
     if (!name) return res.json(400, {err: 'name required'});
     var flag = new level.models.Flag({name:name});
-    flag.save();
+    flag.save(function(e){});
     res.json({flag:flag.hash});
   });
 
