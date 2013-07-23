@@ -49,11 +49,47 @@ describe('Flags CRUD', function() {
 });
 
 
-
 describe('Flag controllers', function() {
 
-  it('making a new flag want a name', function(done) {
+  it('does not recognize content-type', function(done) {
+    request(app).get('/flag/somethingbogus')
+    .set('Content-Type', 'donot/know')
+    .end(function(err, res) { res.should.have.status(415); done()});
+  });
+
+  it('hands out a flag in html', function(done) {
+    var f = new level.models.Flag({name:'kickflip'});
+    f.save(function(err) {
+      should.not.exist(err);
+      request(app).get('/flag/'+f.hash)
+      .set('Content-Type','text/html')
+      .end(function(err, res) {
+        res.should.have.status(200);
+        should.not.exist(err);
+        res.text.should.include('flag-fail');
+        done();
+      });
+    });
+  });
+
+  it('hands out a flag in json', function(done) {
+    var f = new level.models.Flag({name:'fakie180'});
+    f.save(function(err) {
+      should.not.exist(err);
+      request(app).get('/flag/'+f.hash)
+      .set('Content-Type','application/json')
+      .end(function(err, res) {
+        res.should.have.status(200);
+        should.not.exist(err);
+        res.body.flag.should.equal('fail');
+        done();
+      });
+    });
+  });
+
+  it('wants a name', function(done) {
     request(app).post('/flag')
+      .set('Content-Type', 'application/json')
       .send({ this_is_not_a_name : 'yohomie' })
       .end(function(err, res) {
         res.should.have.status(400);
@@ -64,6 +100,7 @@ describe('Flag controllers', function() {
 
   it('makes a new flag', function(done) {
     request(app).post('/flag')
+      .set('Content-Type', 'application/json')
       .send({ name : 'yohomie' })
       .end(function(err, res) {
         res.should.have.status(200);
@@ -90,11 +127,9 @@ describe('Flag controllers', function() {
   });
 
   it('updates a flag', function(done) {
-
     var f = new level.models.Flag({name:'turok'});
     f.save(function(err){
       should.not.exist(err);
-      console.log('HASH is', f.hash);
       request(app).post('/flag/' + f.hash)
         .send({ val : 1 })
         .end(function(err, res) {

@@ -14,6 +14,7 @@
 var level = require('../libs/level');
 var uuid = require('node-uuid');
 
+var FLAGVALS = {0: 'fail', 1: 'stale', 2: 'ok'};
 
 var Flag = new level.Model(
   {
@@ -38,7 +39,10 @@ var Flag = new level.Model(
         this.save(callback);
       }
     , validate : function() {
-        if (! this.val in [0,1,2]) return Error('val out of range');
+        if (! this.val in FLAGVALS) return Error('val out of range');
+      }
+    , toStr   : function() {
+        return FLAGVALS[this.val];
       }
   }
 );
