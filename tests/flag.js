@@ -34,8 +34,20 @@ describe('Flags CRUD', function() {
     });
   });
 
+  it('updates a flag', function(done) {
+    var f = new level.models.Flag({name:'mutant'});
+    f.save(function(err){
+      should.not.exist(err);
+      f.update(2, function(err) {
+        should.not.exist(err);
+        f.val.should.equal(2);
+        done();
+      });
+    });
+  });
 
 });
+
 
 
 describe('Flag controllers', function() {
@@ -77,21 +89,20 @@ describe('Flag controllers', function() {
       });
   });
 
-  /*
-
   it('updates a flag', function(done) {
-    request(app).post('/flag/' + shared_flag.hash)
-      .send({ val : 1 })
-      .end(function(err, res) {
-        res.should.have.status(200);
-        done();
-      });
+
+    var f = new level.models.Flag({name:'turok'});
+    f.save(function(err){
+      should.not.exist(err);
+      console.log('HASH is', f.hash);
+      request(app).post('/flag/' + f.hash)
+        .send({ val : 1 })
+        .end(function(err, res) {
+          res.should.have.status(200);
+          done();
+        });
+    });
   });
-  */
-
-
-
-
 
 });
 

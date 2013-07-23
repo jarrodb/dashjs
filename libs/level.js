@@ -26,11 +26,7 @@ var Model = function(schema, properties) {
       return this._name + '~' + key;
     },
     save: function(cb) {
-      try {
-        this._validate();
-      } catch(e) {
-        return cb(e);
-      }
+      try { this._validate(); } catch(e) { return cb(e); }
       var key = this._recKey();
       this.db.put(key, JSON.stringify(this), cb);
     },

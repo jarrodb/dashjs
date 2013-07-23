@@ -15,9 +15,13 @@ module.exports = function(app, level) {
 
   app.post('/flag/:hash', function(req, res, next) {
     // UPDATE YO FLAG
-    level.models.Flag.prototype.find( req.params.hash, function(err, doc) {
+    console.log('i am in you');
+    level.models.Flag.prototype.find( req.params.hash, function(err, flag) {
       if(err) return res.json(404, { err: 'could not find flag' });
-
+      flag.update(parseInt(req.body.val), function(err) {
+        if (err) return res.json(400, 'value bogus');
+        return res.json({status:'ok'});
+      });
     });
   });
 

@@ -14,12 +14,14 @@
 var level = require('../libs/level');
 var uuid = require('node-uuid');
 
+
 var Flag = new level.Model(
   {
       name    : {type: String}
     , symbol  : {type: String, default: 'flag'} // font-awesome class name for
                                                 // a symbol, w/o 'icon-'
-    , hash    : {type: String, default: uuid.v4 }
+    , hash    : {type: String, default: uuid.v4}
+    , val     : {type: Number, default:  0}
     , stale   : {type: Number, default: -1} // seconds till converts to stale
     , expires : {type: Number, default: -1} // seconds till expire and FAIL.
                                             // note if this is bigger than the
@@ -30,11 +32,13 @@ var Flag = new level.Model(
     , transform : function() {
         // stuff
       }
-    , render : function(format) {
-
+    , render : function(format) { }
+    , update : function(val, callback) {
+        this.val = val;
+        this.save(callback);
       }
-    , update : function(val, ts) {
-        // moar stuff
+    , validate : function() {
+        if (! this.val in [0,1,2]) return Error('val out of range');
       }
   }
 );
