@@ -25,6 +25,7 @@
   "devDependencies": {
     "mocha": "latest",
     "supertest": "latest",
-    "should": "latest"
+    "should": "latest",
+    "nodemon": "latest"
   }
 }
