@@ -38,9 +38,9 @@ describe('Flags CRUD', function() {
     var f = new level.models.Flag({name:'mutant'});
     f.save(function(err){
       should.not.exist(err);
-      f.update(2, function(err) {
+      f.update('ok', function(err) {
         should.not.exist(err);
-        f.val.should.equal(2);
+        f.state.should.equal('ok');
         done();
       });
     });
@@ -126,16 +126,29 @@ describe('Flag controllers', function() {
       });
   });
 
-  it('updates a flag', function(done) {
-    var f = new level.models.Flag({name:'turok'});
+  it('updates a flag wrongly', function(done) {
+    var f = new level.models.Flag({name:'dinohunter'});
     f.save(function(err){
       should.not.exist(err);
       request(app).post('/flag/' + f.hash)
-        .send({ val : 1 })
+        .send({ state : 'ok' })
         .end(function(err, res) {
           res.should.have.status(200);
           done();
         });
+    });
+  });
+
+  it('updates a flag correctly', function(done) {
+    var f = new level.models.Flag({name:'turok'});
+    f.save(function(err){
+      should.not.exist(err);
+      request(app).post('/flag/' + f.hash)
+      .send({ state : 43 })
+      .end(function(err, res) {
+        res.should.have.status(200);
+        done();
+      });
     });
   });
 

@@ -14,7 +14,7 @@
 var level = require('../libs/level');
 var uuid = require('node-uuid');
 
-var FLAGVALS = {0: 'fail', 1: 'stale', 2: 'ok'};
+var FLAGSTATES = ['fail', 'stale', 'ok']
 
 var Flag = new level.Model(
   {
@@ -22,7 +22,7 @@ var Flag = new level.Model(
     , symbol  : {type: String, default: 'flag'} // font-awesome class name for
                                                 // a symbol, w/o 'icon-'
     , hash    : {type: String, default: uuid.v4}
-    , val     : {type: Number, default:  0}
+    , state     : {type: String, default:  'fail'}
     , stale   : {type: Number, default: -1} // seconds till converts to stale
     , expires : {type: Number, default: -1} // seconds till expire and FAIL.
                                             // note if this is bigger than the
@@ -34,15 +34,14 @@ var Flag = new level.Model(
         // stuff
       }
     , render : function(format) { }
-    , update : function(val, callback) {
-        this.val = val;
+    , update : function(state, callback) {
+        this.state = state;
         this.save(callback);
       }
     , validate : function() {
-        if (! this.val in FLAGVALS) return Error('val out of range');
-      }
-    , toStr   : function() {
-        return FLAGVALS[this.val];
+        if (-1 ==  FLAGSTATES.indexOf(this.state)) {
+          return new Error('state invalid'); 
+        }
       }
   }
 );
