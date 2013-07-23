@@ -21,11 +21,10 @@ var passport = require('passport');
 var passportIo = require('passport.socketio');
 
 var LocalStrategy = require('passport-local').Strategy;
-var MemoryStore = express.session.MemoryStore;
 
 // globals
 var app = express();
-var memoryStore = new MemoryStore();
+var memoryStore = new express.session.MemoryStore();
 var server = http.createServer(app);
 io = socketio.listen(server, { log: true });
 
@@ -55,10 +54,10 @@ require('./models/flag');
 
 // middleware
 io.set("authorization", passportIo.authorize({
-  cookieParser: express.cookieParser,
-  store: memoryStore,
-  key: config.session.key,
-  secret: config.session.secret,
+    cookieParser: express.cookieParser
+  , store: memoryStore
+  , key: config.session.key
+  , secret: config.session.secret
 }));
 
 passport.use('user', new LocalStrategy(

@@ -6,18 +6,21 @@
     "start": "nodemon app.js",
     "test": "mocha tests"
   },
+  "comment": {
+    "leveldown": "has a bogus version because level up requires it"
+  },
   "dependencies": {
     "express": "3.2.0",
     "socket.io": "latest",
     "optimist": "latest",
     "levelup": "latest",
-    "leveldown": "latest",
     "express3-handlebars": "~0.4.1",
     "bcrypt": "~0.7.6",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "passport.socketio": "~1.2.1",
-    "node-uuid": "~1.4.0"
+    "node-uuid": "~1.4.0",
+    "leveldown": "~0.5.0"
   },
   "devDependencies": {
     "mocha": "latest",
